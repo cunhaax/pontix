@@ -20,14 +20,12 @@
   --line: #f4e4ec;
   --shadow: 0 2px 10px rgba(150, 40, 90, .08);
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #11141d; --card: #1b1f2c; --text: #eceef5; --muted: #9aa0b4;
-    --accent: #60a5fa; --accent2: #2563eb; --soft: #232a40; --line: #2a3045; --shadow: none;
-  }
-  :root[data-theme="pink"] {
-    --bg: #1a1218; --card: #261a22; --accent: #f472b6; --accent2: #be185d; --soft: #3a2230; --line: #3a2a34;
-  }
+:root[data-scheme="dark"] {
+  --bg: #11141d; --card: #1b1f2c; --text: #eceef5; --muted: #9aa0b4;
+  --accent: #60a5fa; --accent2: #2563eb; --soft: #232a40; --line: #2a3045; --shadow: none;
+}
+:root[data-scheme="dark"][data-theme="pink"] {
+  --bg: #1a1218; --card: #261a22; --accent: #f472b6; --accent2: #be185d; --soft: #3a2230; --line: #3a2a34;
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body {
@@ -116,12 +114,12 @@ td.neg { color: var(--neg); }
 
 /* settings */
 summary { cursor: pointer; font-weight: 700; padding: 2px 0; }
-.themes { display: flex; gap: 10px; }
-.themes button { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 2px solid transparent; color: var(--text); }
-.themes button[aria-pressed="true"] { border-color: var(--accent); }
-.themes i { width: 18px; height: 18px; border-radius: 50%; display: block; }
-.themes [data-th="blue"] i { background: linear-gradient(135deg, #2563eb, #60a5fa); }
-.themes [data-th="pink"] i { background: linear-gradient(135deg, #db2777, #f9a8d4); }
+.seg { display: flex; gap: 10px; }
+.seg button { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 2px solid transparent; color: var(--text); }
+.seg button[aria-pressed="true"] { border-color: var(--accent); }
+.seg i { width: 18px; height: 18px; border-radius: 50%; display: block; }
+.seg [data-th="blue"] i { background: linear-gradient(135deg, #2563eb, #60a5fa); }
+.seg [data-th="pink"] i { background: linear-gradient(135deg, #db2777, #f9a8d4); }
 .edit-list li { display: flex; gap: 6px; margin-bottom: 8px; }
 .edit-list input[type=text] { flex: 1; min-width: 0; }
 .edit-list input.cost, .add-form input.cost { width: 72px; }

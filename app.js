@@ -35,7 +35,7 @@ function sumWeek(week) {
 function emptyState() {
   return {
     v: 1, t: 0, ws: isoDate(mondayOf(new Date())),
-    kid: "", th: "blue", tasks: [], rewards: [], cur: {}, prev: {}, base: 0, spent: 0,
+    kid: "", th: "blue", md: "system", tasks: [], rewards: [], cur: {}, prev: {}, base: 0, spent: 0,
   };
 }
 
@@ -329,6 +329,13 @@ function removeReward(r) {
   if (confirm(t("removeRewardConfirm", { name: r.n }))) change((s) => { s.rewards = s.rewards.filter((k) => k.id !== r.id); });
 }
 
+const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+function applyScheme() {
+  const dark = state.md === "dark" || (state.md !== "light" && darkQuery.matches);
+  document.documentElement.dataset.scheme = dark ? "dark" : "light";
+}
+darkQuery.addEventListener("change", applyScheme);
+
 function render() {
   applyStatic();
   showSettings(inSettings);
@@ -338,6 +345,8 @@ function render() {
   $("balance-label").textContent = state.kid ? t("balanceOf", { name: state.kid }) : t("balance");
   $("kid").placeholder = t("childName");
   if (document.activeElement !== $("kid")) $("kid").value = state.kid || "";
+  applyScheme();
+  document.querySelectorAll("#modes button").forEach((btn) => btn.setAttribute("aria-pressed", btn.dataset.md === (state.md || "system")));
   document.querySelectorAll("#themes button").forEach((btn) => btn.setAttribute("aria-pressed", btn.dataset.th === state.th));
   const b = $("balance");
   b.textContent = bal;
@@ -404,6 +413,8 @@ $("add-reward").addEventListener("submit", (e) => {
 $("kid").addEventListener("input", (e) => change((s) => { s.kid = e.target.value.trim().slice(0, 30); }));
 document.querySelectorAll("#themes button").forEach((btn) =>
   btn.addEventListener("click", () => change((s) => { s.th = btn.dataset.th; })));
+document.querySelectorAll("#modes button").forEach((btn) =>
+  btn.addEventListener("click", () => change((s) => { s.md = btn.dataset.md; })));
 $("reset").addEventListener("click", () => {
   if (confirm(t("resetConfirm"))) change((s) => Object.assign(s, emptyState()));
 });
