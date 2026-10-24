@@ -29,7 +29,7 @@ function sumWeek(week) {
 // { v, t (last change, ms), ws (Monday of the current week, ISO date),
 //   tasks:[{id,n,p (points per tap)}], rewards:[{id,n,c}],
 //   cur / prev: { taskId: [7 ints, Mon..Sun] },
-//   kid (child name), th ("blue"|"pink"),
+//   kid (child name), th ("blue"|"pink"|"green"|"yellow"),
 //   base (points older than two weeks), spent (points spent on rewards) }
 
 function emptyState() {
@@ -343,18 +343,21 @@ function applyScheme() {
 }
 darkQuery.addEventListener("change", applyScheme);
 
+const THEME_COLORS = { blue: "#2563eb", pink: "#db2777", green: "#15803d", yellow: "#a16207" };
+
 function render() {
   applyStatic();
   showSettings(inSettings);
   const bal = balance(state);
-  document.documentElement.dataset.theme = state.th === "pink" ? "pink" : "blue";
-  document.querySelector('meta[name="theme-color"]').content = state.th === "pink" ? "#db2777" : "#2563eb";
+  const th = THEME_COLORS[state.th] ? state.th : "blue";
+  document.documentElement.dataset.theme = th;
+  document.querySelector('meta[name="theme-color"]').content = THEME_COLORS[th];
   $("balance-label").textContent = state.kid ? t("balanceOf", { name: state.kid }) : t("balance");
   $("kid").placeholder = t("childName");
   if (document.activeElement !== $("kid")) $("kid").value = state.kid || "";
   applyScheme();
   document.querySelectorAll("#modes button").forEach((btn) => btn.setAttribute("aria-pressed", btn.dataset.md === (state.md || "system")));
-  document.querySelectorAll("#themes button").forEach((btn) => btn.setAttribute("aria-pressed", btn.dataset.th === state.th));
+  document.querySelectorAll("#themes button").forEach((btn) => btn.setAttribute("aria-pressed", btn.dataset.th === (THEME_COLORS[state.th] ? state.th : "blue")));
   const b = $("balance");
   b.textContent = bal;
   b.className = bal < 0 ? "neg" : "";

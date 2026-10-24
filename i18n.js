@@ -73,6 +73,8 @@ const I18N = {
     theme: "🎨 Colour theme",
     blue: "Blue",
     pink: "Pink",
+    green: "Green",
+    yellow: "Yellow",
     pointsPerTap: "Points per tap",
   },
   pt: {
@@ -148,6 +150,8 @@ const I18N = {
     theme: "🎨 Tema de cores",
     blue: "Azul",
     pink: "Rosa",
+    green: "Verde",
+    yellow: "Amarelo",
     pointsPerTap: "Pontos por toque",
   },
 };
