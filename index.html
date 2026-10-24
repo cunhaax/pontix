@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#4f46e5">
+  <title>Pontix</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Pontix</h1>
+    <label class="lang">
+      <span class="sr" data-i18n="language"></span>
+      <select id="lang">
+        <option value="en">English</option>
+        <option value="pt">Português</option>
+      </select>
+    </label>
+  </header>
+
+  <main>
+    <section class="balance">
+      <div class="label" data-i18n="balance"></div>
+      <div class="value"><span id="balance">0</span> <small data-i18n="points"></small></div>
+    </section>
+
+    <section>
+      <h2 data-i18n="thisWeek"></h2>
+      <div class="grid-wrap" id="grid-cur"></div>
+    </section>
+
+    <section>
+      <h2 data-i18n="lastWeek"></h2>
+      <div class="grid-wrap" id="grid-prev"></div>
+    </section>
+
+    <section>
+      <h2 data-i18n="chartTitle"></h2>
+      <div id="chart"></div>
+    </section>
+
+    <section>
+      <h2 data-i18n="rewards"></h2>
+      <ul class="rewards" id="rewards"></ul>
+    </section>
+
+    <section>
+      <details>
+        <summary data-i18n="manage"></summary>
+        <h3 data-i18n="tasks"></h3>
+        <ul class="edit-list" id="edit-tasks"></ul>
+        <form id="add-task" class="add-form">
+          <input name="n" required maxlength="60" data-i18n-ph="taskName">
+          <button type="submit" data-i18n="add"></button>
+        </form>
+
+        <h3 data-i18n="rewards"></h3>
+        <ul class="edit-list" id="edit-rewards"></ul>
+        <form id="add-reward" class="add-form">
+          <input name="n" required maxlength="60" data-i18n-ph="rewardName">
+          <input name="c" type="number" required min="1" step="1" inputmode="numeric" class="cost" data-i18n-ph="cost">
+          <button type="submit" data-i18n="add"></button>
+        </form>
+
+        <button type="button" id="reset" class="danger" data-i18n="reset"></button>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <p class="hint" data-i18n="shareHint"></p>
+    <button id="share" class="primary" data-i18n="share"></button>
+  </footer>
+
+  <div id="toast" role="status"></div>
+
+  <script src="i18n.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
