@@ -27,14 +27,15 @@ function sumWeek(week) {
 
 // ---------- state ----------
 // { v, t (last change, ms), ws (Monday of the current week, ISO date),
-//   tasks:[{id,n}], rewards:[{id,n,c}],
+//   tasks:[{id,n,p (points per tap)}], rewards:[{id,n,c}],
 //   cur / prev: { taskId: [7 ints, Mon..Sun] },
+//   kid (child name), th ("blue"|"pink"),
 //   base (points older than two weeks), spent (points spent on rewards) }
 
 function emptyState() {
   return {
     v: 1, t: 0, ws: isoDate(mondayOf(new Date())),
-    tasks: [], rewards: [], cur: {}, prev: {}, base: 0, spent: 0,
+    kid: "", th: "blue", tasks: [], rewards: [], cur: {}, prev: {}, base: 0, spent: 0,
   };
 }
 
@@ -155,17 +156,25 @@ function applyStatic() {
   document.documentElement.lang = lang === "pt" ? "pt-PT" : "en";
   $("lang").value = lang;
   document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll("[data-i18n-aria]").forEach((el) => { el.ariaLabel = t(el.dataset.i18nAria); });
   document.querySelectorAll("[data-i18n-ph]").forEach((el) => { el.placeholder = t(el.dataset.i18nPh); });
 }
 
 // ---------- rendering ----------
+
+// Weekday names and day-of-month numbers for the week `weeksBack` before the current one.
+function weekDays(weeksBack = 0) {
+  const mon = parseDate(state.ws);
+  mon.setDate(mon.getDate() - 7 * weeksBack);
+  return [...Array(7)].map((_, i) => { const d = new Date(mon); d.setDate(mon.getDate() + i); return d.getDate(); });
+}
 
 function weekdayLabels() {
   const fmt = new Intl.DateTimeFormat(lang === "pt" ? "pt-PT" : "en", { weekday: "short" });
   const mon = parseDate(state.ws);
   return [...Array(7)].map((_, i) => {
     const d = new Date(mon); d.setDate(mon.getDate() + i);
-    return fmt.format(d).replace(".", "");
+    return fmt.format(d).replace(".", "").slice(0, 3);
   });
 }
 
@@ -192,26 +201,31 @@ function renderGrid(container, weekKey, editable) {
   const todayIdx = weekKey === "cur" ? (new Date().getDay() + 6) % 7 : -1;
 
   const head = el("tr", null, el("th", { textContent: t("task") }));
-  labels.forEach((l, i) => head.append(el("th", { textContent: l, className: i === todayIdx ? "today" : "" })));
-  head.append(el("th", { textContent: t("total") }));
+  const nums = weekDays(weekKey === "cur" ? 0 : 1);
+  labels.forEach((l, i) => head.append(el("th", { className: i === todayIdx ? "today" : "" },
+    l, el("div", { className: "dnum", textContent: nums[i] }))));
   const tbody = el("tbody");
 
   for (const task of state.tasks) {
     const days = week[task.id] || (week[task.id] = Array(7).fill(0));
-    const tr = el("tr", null, el("td", { textContent: task.n }));
+    const step = taskPts(task);
+    const tot = days.reduce((a, b) => a + b, 0);
+    const tr = el("tr", null, el("td", null, el("div", { className: "tname", textContent: task.n }),
+      el("div", { className: "tpts", textContent: `+${step}/tap · ${t("total")} ` },
+        el("b", { className: tot < 0 ? "neg" : "", textContent: tot }))));
     days.forEach((v, i) => {
       const cell = el("div", { className: "cell" },
-        el("button", { textContent: "+", ariaLabel: t("plus"), onclick: () => adjust(weekKey, task.id, i, 1) }),
+        el("button", { textContent: "+", ariaLabel: t("plus"), onclick: () => adjust(weekKey, task.id, i, step) }),
         numSpan(v),
-        el("button", { textContent: "−", ariaLabel: t("minus"), onclick: () => adjust(weekKey, task.id, i, -1) }));
+        el("button", { textContent: "−", ariaLabel: t("minus"), onclick: () => adjust(weekKey, task.id, i, -step) }));
       tr.append(el("td", { className: i === todayIdx ? "today" : "" }, cell));
     });
-    const tot = days.reduce((a, b) => a + b, 0);
-    tr.append(el("td", { className: "tot " + (tot < 0 ? "neg" : ""), textContent: tot }));
     tbody.append(tr);
   }
   container.append(el("table", null, el("thead", null, head), tbody));
 }
+
+function taskPts(task) { return task.p > 0 ? task.p : 1; }
 
 function adjust(weekKey, id, day, delta) {
   change((s) => {
@@ -285,6 +299,8 @@ function renderEditors() {
   for (const task of state.tasks) {
     tl.append(el("li", null,
       el("input", { type: "text", value: task.n, maxLength: 60, onchange: (e) => rename(task.id, e.target.value) }),
+      el("input", { type: "number", value: taskPts(task), min: 1, step: 1, inputMode: "numeric", className: "cost",
+        ariaLabel: t("pointsPerTap"), onchange: (e) => editTask(task.id, { p: Math.max(1, parseInt(e.target.value, 10) || taskPts(task)) }) }),
       el("button", { textContent: "✕", ariaLabel: t("remove"), onclick: () => removeTask(task) })));
   }
   for (const r of state.rewards) {
@@ -298,6 +314,9 @@ function renderEditors() {
 
 function rename(id, name) {
   change((s) => { const x = s.tasks.find((k) => k.id === id); if (x && name.trim()) x.n = name.trim(); });
+}
+function editTask(id, patch) {
+  change((s) => Object.assign(s.tasks.find((k) => k.id === id) || {}, patch));
 }
 function editReward(id, patch) {
   change((s) => Object.assign(s.rewards.find((k) => k.id === id) || {}, patch));
@@ -313,6 +332,12 @@ function removeReward(r) {
 function render() {
   applyStatic();
   const bal = balance(state);
+  document.documentElement.dataset.theme = state.th === "pink" ? "pink" : "blue";
+  document.querySelector('meta[name="theme-color"]').content = state.th === "pink" ? "#db2777" : "#2563eb";
+  $("balance-label").textContent = state.kid ? t("balanceOf", { name: state.kid }) : t("balance");
+  $("kid").placeholder = t("childName");
+  if (document.activeElement !== $("kid")) $("kid").value = state.kid || "";
+  document.querySelectorAll("#themes button").forEach((btn) => btn.setAttribute("aria-pressed", btn.dataset.th === state.th));
   const b = $("balance");
   b.textContent = bal;
   b.className = bal < 0 ? "neg" : "";
@@ -351,9 +376,9 @@ $("lang").addEventListener("change", (e) => {
 });
 $("add-task").addEventListener("submit", (e) => {
   e.preventDefault();
-  const n = e.target.n.value.trim();
+  const n = e.target.n.value.trim(), p = parseInt(e.target.p.value, 10) || 1;
   if (!n) return;
-  change((s) => s.tasks.push({ id: uid(), n }));
+  change((s) => s.tasks.push({ id: uid(), n, p: Math.max(1, p) }));
   e.target.reset();
 });
 $("add-reward").addEventListener("submit", (e) => {
@@ -363,8 +388,15 @@ $("add-reward").addEventListener("submit", (e) => {
   change((s) => s.rewards.push({ id: uid(), n, c }));
   e.target.reset();
 });
+$("kid").addEventListener("input", (e) => change((s) => { s.kid = e.target.value.trim().slice(0, 30); }));
+document.querySelectorAll("#themes button").forEach((btn) =>
+  btn.addEventListener("click", () => change((s) => { s.th = btn.dataset.th; })));
 $("reset").addEventListener("click", () => {
   if (confirm(t("resetConfirm"))) change((s) => Object.assign(s, emptyState()));
+});
+// Keep the week boundaries right if the page stays open across midnight.
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && rollover(state)) { render(); persist(false); }
 });
 // Opening a different link in an already-open tab.
 window.addEventListener("hashchange", async () => {

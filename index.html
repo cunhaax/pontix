@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#4f46e5">
+  <meta name="theme-color" content="#2563eb">
   <title>Pontix</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -21,7 +21,7 @@
 
   <main>
     <section class="balance">
-      <div class="label" data-i18n="balance"></div>
+      <div class="label" id="balance-label"></div>
       <div class="value"><span id="balance">0</span> <small data-i18n="points"></small></div>
     </section>
 
@@ -48,10 +48,21 @@
     <section>
       <details>
         <summary data-i18n="manage"></summary>
+        <h3 data-i18n="child"></h3>
+        <div class="add-form">
+          <input id="kid" maxlength="30" autocomplete="off">
+        </div>
+        <h3 data-i18n="theme"></h3>
+        <div id="themes" class="themes">
+          <button type="button" data-th="blue" aria-pressed="true"><i></i><span data-i18n="blue"></span></button>
+          <button type="button" data-th="pink" aria-pressed="false"><i></i><span data-i18n="pink"></span></button>
+        </div>
+
         <h3 data-i18n="tasks"></h3>
         <ul class="edit-list" id="edit-tasks"></ul>
         <form id="add-task" class="add-form">
           <input name="n" required maxlength="60" data-i18n-ph="taskName">
+          <input name="p" type="number" min="1" step="1" value="1" inputmode="numeric" class="cost" data-i18n-aria="pointsPerTap" aria-label="Points per tap">
           <button type="submit" data-i18n="add"></button>
         </form>
 
