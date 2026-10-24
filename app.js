@@ -240,6 +240,9 @@ function dayTotals(week) {
   return out;
 }
 
+// Drop the leading emoji of a label (SVG text renders it poorly).
+const plain = (str) => str.replace(/^\S+\s/, "");
+
 function renderChart() {
   const vals = [...dayTotals(state.prev), ...dayTotals(state.cur)];
   const W = 340, H = 170, top = 18, bottom = 30, left = 4, right = 4;
@@ -270,8 +273,8 @@ function renderChart() {
   });
   svg.append(mk("line", { class: "axis", x1: left, x2: W - right, y1: y(0), y2: y(0) }));
   svg.append(mk("line", { class: "sep", x1: left + 7 * bw, x2: left + 7 * bw, y1: top, y2: H - bottom }));
-  svg.append(mk("text", { x: left + 3.5 * bw, y: H - 2, "text-anchor": "middle" }, t("lastWeek")));
-  svg.append(mk("text", { x: left + 10.5 * bw, y: H - 2, "text-anchor": "middle" }, t("thisWeek")));
+  svg.append(mk("text", { x: left + 3.5 * bw, y: H - 2, "text-anchor": "middle" }, plain(t("lastWeek"))));
+  svg.append(mk("text", { x: left + 10.5 * bw, y: H - 2, "text-anchor": "middle" }, plain(t("thisWeek"))));
   $("chart").replaceChildren(svg);
 }
 
@@ -283,10 +286,14 @@ function renderRewards() {
   for (const r of state.rewards) {
     const btn = el("button", {
       textContent: t("redeem"), disabled: bal < r.c, title: bal < r.c ? t("notEnough") : "",
-      onclick: () => { if (confirm(t("redeemConfirm", { name: r.n, cost: r.c }))) change((s) => { s.spent += r.c; }); },
+      onclick: () => {
+        if (!confirm(t("redeemConfirm", { name: r.n, cost: r.c }))) return;
+        change((s) => { s.spent += r.c; });
+        toast(t("redeemed", { name: r.n }));
+      },
     });
     ul.append(el("li", null,
-      el("span", { className: "name", textContent: r.n }),
+      el("span", { className: "name", textContent: "🎁 " + r.n }),
       el("span", { className: "cost", textContent: `${r.c} ${t("points")}` }), btn));
   }
 }
@@ -383,7 +390,7 @@ function showSettings(on) {
   inSettings = on;
   $("view-main").hidden = on;
   $("view-settings").hidden = !on;
-  $("title").textContent = on ? t("settings") : "Pontix";
+  $("title").textContent = on ? t("settings") : "🚀 Pontix";
   $("gear").textContent = on ? t("done") : "⚙";
   $("gear").ariaLabel = on ? t("done") : t("settings");
   $("gear").classList.toggle("text", on);
