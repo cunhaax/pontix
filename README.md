@@ -1,5 +1,12 @@
 # Pontix
 
+**Live demo: https://cunhaax.github.io/pontix/**
+
+<p>
+  <img src="docs/screenshot-light.png" alt="Pontix, light theme" width="300">
+  <img src="docs/screenshot-dark.png" alt="Pontix, dark pink theme" width="300">
+</p>
+
 A tiny, free, static web page for parents to track a points system that motivates a child to do chores.
 
 - One child, configurable tasks and rewards.
@@ -8,6 +15,7 @@ A tiny, free, static web page for parents to track a points system that motivate
 - Redeeming a reward subtracts its cost from the balance immediately.
 - Bar chart of the last 14 days.
 - English and Portuguese (PT-PT) UI; follows the browser language, switchable on the page.
+- First-run welcome card with a one-tap "Start with examples".
 - Mobile first (made for iPhone Safari). No framework, no build step, no back-end.
 
 ## How data is stored

@@ -293,7 +293,7 @@ function renderRewards() {
       },
     });
     ul.append(el("li", null,
-      el("span", { className: "name", textContent: "🎁 " + r.n }),
+      el("span", { className: "name", textContent: (/^\p{Extended_Pictographic}/u.test(r.n) ? "" : "🎁 ") + r.n }),
       el("span", { className: "cost", textContent: `${r.c} ${t("points")}` }), btn));
   }
 }
@@ -358,6 +358,9 @@ function render() {
   const b = $("balance");
   b.textContent = bal;
   b.className = bal < 0 ? "neg" : "";
+  const fresh = !state.tasks.length;
+  $("welcome").hidden = !fresh;
+  document.querySelectorAll("#view-main .data").forEach((sec) => { sec.hidden = fresh; });
   renderGrid($("grid-cur"), "cur", true);
   renderGrid($("grid-prev"), "prev", true);
   renderChart();
@@ -422,6 +425,13 @@ document.querySelectorAll("#themes button").forEach((btn) =>
   btn.addEventListener("click", () => change((s) => { s.th = btn.dataset.th; })));
 document.querySelectorAll("#modes button").forEach((btn) =>
   btn.addEventListener("click", () => change((s) => { s.md = btn.dataset.md; })));
+$("examples").addEventListener("click", () => {
+  const ex = I18N[lang];
+  change((s) => {
+    ex.exTasks.forEach(([n, p]) => s.tasks.push({ id: uid(), n, p }));
+    ex.exRewards.forEach(([n, c]) => s.rewards.push({ id: uid(), n, c }));
+  });
+});
 $("reset").addEventListener("click", () => {
   if (confirm(t("resetConfirm"))) change((s) => Object.assign(s, emptyState()));
 });

@@ -19,22 +19,34 @@
       <div class="value">⭐ <span id="balance">0</span> <small data-i18n="points"></small></div>
     </section>
 
-    <section>
+    <section id="welcome" hidden>
+      <h2 data-i18n="welcomeTitle"></h2>
+      <p class="pitch" data-i18n="welcomePitch"></p>
+      <ol class="steps">
+        <li data-i18n="welcomeStep1"></li>
+        <li data-i18n="welcomeStep2"></li>
+        <li data-i18n="welcomeStep3"></li>
+      </ol>
+      <button type="button" id="examples" class="primary" data-i18n="welcomeExamples"></button>
+      <p class="privacy" data-i18n="welcomePrivacy"></p>
+    </section>
+
+    <section class="data">
       <h2 data-i18n="thisWeek"></h2>
       <div class="grid-wrap" id="grid-cur"></div>
     </section>
 
-    <section>
+    <section class="data">
       <h2 data-i18n="lastWeek"></h2>
       <div class="grid-wrap" id="grid-prev"></div>
     </section>
 
-    <section>
+    <section class="data">
       <h2 data-i18n="chartTitle"></h2>
       <div id="chart"></div>
     </section>
 
-    <section>
+    <section class="data">
       <h2 data-i18n="rewards"></h2>
       <ul class="rewards" id="rewards"></ul>
     </section>
