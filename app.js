@@ -331,6 +331,7 @@ function removeReward(r) {
 
 function render() {
   applyStatic();
+  showSettings(inSettings);
   const bal = balance(state);
   document.documentElement.dataset.theme = state.th === "pink" ? "pink" : "blue";
   document.querySelector('meta[name="theme-color"]').content = state.th === "pink" ? "#db2777" : "#2563eb";
@@ -367,6 +368,18 @@ async function share() {
   }
   try { await navigator.clipboard.writeText(url); toast(t("copied")); } catch (e) { prompt(t("share"), url); }
 }
+
+let inSettings = false;
+function showSettings(on) {
+  inSettings = on;
+  $("view-main").hidden = on;
+  $("view-settings").hidden = !on;
+  $("title").textContent = on ? t("settings") : "Pontix";
+  $("gear").textContent = on ? t("done") : "⚙";
+  $("gear").ariaLabel = on ? t("done") : t("settings");
+  $("gear").classList.toggle("text", on);
+}
+$("gear").addEventListener("click", () => { showSettings(!inSettings); window.scrollTo(0, 0); render(); });
 
 $("share").addEventListener("click", share);
 $("lang").addEventListener("change", (e) => {

@@ -163,3 +163,8 @@ footer { z-index: 10; }
 }
 .dnum { font-size: .95rem; font-weight: 700; color: var(--text); }
 th.today .dnum { color: var(--accent); }
+
+#gear { font-size: 1.3rem; padding: 6px 14px; line-height: 1.2; }
+#gear.text { font-size: 1rem; }
+[hidden] { display: none !important; }
+#view-settings .danger { width: 100%; margin-top: 4px; }

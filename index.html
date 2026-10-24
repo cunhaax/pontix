@@ -9,17 +9,11 @@
 </head>
 <body>
   <header>
-    <h1>Pontix</h1>
-    <label class="lang">
-      <span class="sr" data-i18n="language"></span>
-      <select id="lang">
-        <option value="en">English</option>
-        <option value="pt">Português</option>
-      </select>
-    </label>
+    <h1 id="title">Pontix</h1>
+    <button type="button" id="gear" aria-label="Settings">⚙</button>
   </header>
 
-  <main>
+  <main id="view-main">
     <section class="balance">
       <div class="label" id="balance-label"></div>
       <div class="value"><span id="balance">0</span> <small data-i18n="points"></small></div>
@@ -45,38 +39,47 @@
       <ul class="rewards" id="rewards"></ul>
     </section>
 
+  </main>
+
+  <main id="view-settings" hidden>
     <section>
-      <details>
-        <summary data-i18n="manage"></summary>
-        <h3 data-i18n="child"></h3>
-        <div class="add-form">
-          <input id="kid" maxlength="30" autocomplete="off">
-        </div>
-        <h3 data-i18n="theme"></h3>
-        <div id="themes" class="themes">
-          <button type="button" data-th="blue" aria-pressed="true"><i></i><span data-i18n="blue"></span></button>
-          <button type="button" data-th="pink" aria-pressed="false"><i></i><span data-i18n="pink"></span></button>
-        </div>
-
-        <h3 data-i18n="tasks"></h3>
-        <ul class="edit-list" id="edit-tasks"></ul>
-        <form id="add-task" class="add-form">
-          <input name="n" required maxlength="60" data-i18n-ph="taskName">
-          <input name="p" type="number" min="1" step="1" value="1" inputmode="numeric" class="cost" data-i18n-aria="pointsPerTap" aria-label="Points per tap">
-          <button type="submit" data-i18n="add"></button>
-        </form>
-
-        <h3 data-i18n="rewards"></h3>
-        <ul class="edit-list" id="edit-rewards"></ul>
-        <form id="add-reward" class="add-form">
-          <input name="n" required maxlength="60" data-i18n-ph="rewardName">
-          <input name="c" type="number" required min="1" step="1" inputmode="numeric" class="cost" data-i18n-ph="cost">
-          <button type="submit" data-i18n="add"></button>
-        </form>
-
-        <button type="button" id="reset" class="danger" data-i18n="reset"></button>
-      </details>
+      <h2 data-i18n="child"></h2>
+      <div class="add-form">
+        <input id="kid" maxlength="30" autocomplete="off">
+      </div>
+      <h3 data-i18n="theme"></h3>
+      <div id="themes" class="themes">
+        <button type="button" data-th="blue" aria-pressed="true"><i></i><span data-i18n="blue"></span></button>
+        <button type="button" data-th="pink" aria-pressed="false"><i></i><span data-i18n="pink"></span></button>
+      </div>
+      <h3 data-i18n="language"></h3>
+      <select id="lang">
+        <option value="en">English</option>
+        <option value="pt">Português</option>
+      </select>
     </section>
+
+    <section>
+      <h2 data-i18n="tasks"></h2>
+      <ul class="edit-list" id="edit-tasks"></ul>
+      <form id="add-task" class="add-form">
+        <input name="n" required maxlength="60" data-i18n-ph="taskName">
+        <input name="p" type="number" min="1" step="1" value="1" inputmode="numeric" class="cost" data-i18n-aria="pointsPerTap">
+        <button type="submit" data-i18n="add"></button>
+      </form>
+    </section>
+
+    <section>
+      <h2 data-i18n="rewards"></h2>
+      <ul class="edit-list" id="edit-rewards"></ul>
+      <form id="add-reward" class="add-form">
+        <input name="n" required maxlength="60" data-i18n-ph="rewardName">
+        <input name="c" type="number" required min="1" step="1" inputmode="numeric" class="cost" data-i18n-ph="cost">
+        <button type="submit" data-i18n="add"></button>
+      </form>
+    </section>
+
+    <button type="button" id="reset" class="danger" data-i18n="reset"></button>
   </main>
 
   <footer>
