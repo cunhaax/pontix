@@ -31,8 +31,14 @@ python3 -m http.server 8000   # then open http://localhost:8000
 
 Push to GitHub, then *Settings → Pages → Deploy from branch → `main` / root*.
 
+## License
+
+[MIT](LICENSE)
+
 ## Resumo em português
 
 O Pontix é uma página estática e gratuita para os pais registarem pontos de tarefas de uma criança. Define tarefas e prémios, regista pontos (com **+**/**−**) numa grelha semanal, vê o saldo e um gráfico dos últimos 14 dias, e troca prémios. Só a semana atual e a anterior ficam com detalhe; o resto passa para um total acumulado.
 
 Os dados vão no próprio link (depois do `#`) e também no `localStorage`. **Depois de registar pontos, use "Partilhar link"** para que os dois pais tenham a mesma versão. A interface existe em português de Portugal e em inglês.
+
+Licença: [MIT](LICENSE).
