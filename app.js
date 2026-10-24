@@ -361,6 +361,8 @@ function render() {
   const fresh = !state.tasks.length;
   $("welcome").hidden = !fresh;
   document.querySelectorAll("#view-main .data").forEach((sec) => { sec.hidden = fresh; });
+  document.querySelector("footer").hidden = fresh;
+  document.querySelectorAll(".langs button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.lang === lang));
   renderGrid($("grid-cur"), "cur", true);
   renderGrid($("grid-prev"), "prev", true);
   renderChart();
@@ -401,11 +403,13 @@ function showSettings(on) {
 $("gear").addEventListener("click", () => { showSettings(!inSettings); window.scrollTo(0, 0); render(); });
 
 $("share").addEventListener("click", share);
-$("lang").addEventListener("change", (e) => {
-  lang = e.target.value;
+function setLang(l) {
+  lang = l;
   try { localStorage.setItem(LANG_KEY, lang); } catch (err) { /* ignore */ }
   render();
-});
+}
+$("lang").addEventListener("change", (e) => setLang(e.target.value));
+document.querySelectorAll(".langs button").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
 $("add-task").addEventListener("submit", (e) => {
   e.preventDefault();
   const n = e.target.n.value.trim(), p = parseInt(e.target.p.value, 10) || 1;
@@ -425,13 +429,17 @@ document.querySelectorAll("#themes button").forEach((btn) =>
   btn.addEventListener("click", () => change((s) => { s.th = btn.dataset.th; })));
 document.querySelectorAll("#modes button").forEach((btn) =>
   btn.addEventListener("click", () => change((s) => { s.md = btn.dataset.md; })));
-$("examples").addEventListener("click", () => {
+document.querySelectorAll('[data-action="examples"]').forEach((b) => b.addEventListener("click", () => {
   const ex = I18N[lang];
   change((s) => {
     ex.exTasks.forEach(([n, p]) => s.tasks.push({ id: uid(), n, p }));
     ex.exRewards.forEach(([n, c]) => s.rewards.push({ id: uid(), n, c }));
   });
-});
+  window.scrollTo(0, 0);
+}));
+document.querySelectorAll('[data-action="scratch"]').forEach((b) => b.addEventListener("click", () => {
+  showSettings(true); window.scrollTo(0, 0);
+}));
 $("reset").addEventListener("click", () => {
   if (confirm(t("resetConfirm"))) change((s) => Object.assign(s, emptyState()));
 });

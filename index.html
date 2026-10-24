@@ -14,22 +14,52 @@
   </header>
 
   <main id="view-main">
-    <section class="balance">
+    <section class="balance data">
       <div class="label" id="balance-label"></div>
       <div class="value">⭐ <span id="balance">0</span> <small data-i18n="points"></small></div>
     </section>
 
-    <section id="welcome" hidden>
-      <h2 data-i18n="welcomeTitle"></h2>
-      <p class="pitch" data-i18n="welcomePitch"></p>
-      <ol class="steps">
-        <li data-i18n="welcomeStep1"></li>
-        <li data-i18n="welcomeStep2"></li>
-        <li data-i18n="welcomeStep3"></li>
-      </ol>
-      <button type="button" id="examples" class="primary" data-i18n="welcomeExamples"></button>
-      <p class="privacy" data-i18n="welcomePrivacy"></p>
-    </section>
+    <div id="welcome" hidden>
+      <section class="hero">
+        <div class="langs" role="group" aria-label="Language">
+          <button type="button" data-lang="en">EN</button>
+          <button type="button" data-lang="pt">PT</button>
+        </div>
+        <div class="hero-emoji" aria-hidden="true">🛏️ 🦷 📚 🧸 ➜ ⭐ ➜ 🎁</div>
+        <h2 class="hero-title" data-i18n="heroTitle"></h2>
+        <p class="hero-sub" data-i18n="heroSub"></p>
+        <button type="button" class="cta" data-action="examples" data-i18n="ctaExamples"></button>
+        <button type="button" class="cta-secondary" data-action="scratch" data-i18n="ctaScratch"></button>
+        <p class="hero-note" data-i18n="heroNote"></p>
+      </section>
+
+      <section class="features">
+        <h2 data-i18n="whyTitle"></h2>
+        <div class="feature-grid">
+          <div class="feature"><span class="ico">💸</span><h3 data-i18n="f1t"></h3><p data-i18n="f1d"></p></div>
+          <div class="feature"><span class="ico">🔒</span><h3 data-i18n="f2t"></h3><p data-i18n="f2d"></p></div>
+          <div class="feature"><span class="ico">👨‍👩‍👧</span><h3 data-i18n="f3t"></h3><p data-i18n="f3d"></p></div>
+          <div class="feature"><span class="ico">🎯</span><h3 data-i18n="f4t"></h3><p data-i18n="f4d"></p></div>
+          <div class="feature"><span class="ico">🎁</span><h3 data-i18n="f5t"></h3><p data-i18n="f5d"></p></div>
+          <div class="feature"><span class="ico">📊</span><h3 data-i18n="f6t"></h3><p data-i18n="f6d"></p></div>
+        </div>
+      </section>
+
+      <section>
+        <h2 data-i18n="howTitle"></h2>
+        <ol class="steps">
+          <li data-i18n="welcomeStep1"></li>
+          <li data-i18n="welcomeStep2"></li>
+          <li data-i18n="welcomeStep3"></li>
+        </ol>
+      </section>
+
+      <section class="final">
+        <h2 class="final-title" data-i18n="finalTitle"></h2>
+        <button type="button" class="cta" data-action="examples" data-i18n="ctaExamples"></button>
+        <button type="button" class="cta-secondary" data-action="scratch" data-i18n="ctaScratch"></button>
+      </section>
+    </div>
 
     <section class="data">
       <h2 data-i18n="thisWeek"></h2>
