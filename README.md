@@ -29,7 +29,7 @@ python3 -m http.server 8000   # then open http://localhost:8000
 
 ## Deploy
 
-Push to GitHub, then *Settings → Pages → Deploy from branch → `main` / root*.
+Push to GitHub, then *Settings → Pages → Deploy from branch → `master` / root*.
 
 ## License
 
