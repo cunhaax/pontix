@@ -81,6 +81,13 @@
       <ul class="rewards" id="rewards"></ul>
     </section>
 
+    <section class="data">
+      <h2 data-i18n="printTitle"></h2>
+      <p class="print-hint" data-i18n="printHint"></p>
+      <div class="print-actions">
+        <button type="button" id="print" data-i18n="printButton"></button>
+      </div>
+    </section>
   </main>
 
   <main id="view-settings" hidden>
@@ -146,6 +153,7 @@
   </footer>
 
   <div id="toast" role="status"></div>
+  <div id="print-sheet" aria-hidden="true"></div>
 
   <script src="i18n.js"></script>
   <script src="app.js"></script>

@@ -432,6 +432,43 @@ document.querySelectorAll("#themes button").forEach((btn) =>
   btn.addEventListener("click", () => change((s) => { s.th = btn.dataset.th; })));
 document.querySelectorAll("#modes button").forEach((btn) =>
   btn.addEventListener("click", () => change((s) => { s.md = btn.dataset.md; })));
+// ---------- printable checklist ----------
+
+// Fill #print-sheet with a blank, date-free black-and-white checklist (reusable week after week).
+function buildSheet() {
+  const locale = lang === "pt" ? "pt-PT" : "en";
+  const wd = new Intl.DateTimeFormat(locale, { weekday: "short" });
+  const title = `⭐ ${state.kid ? t("sheetOf", { name: state.kid }) : t("sheetMine")} ⭐`;
+
+  const head = el("tr", null, el("th", { textContent: `📋 ${t("sheetTasks")}` }));
+  for (let i = 0; i < 7; i++) {
+    // 2024-01-01 was a Monday; only the weekday name is used.
+    head.append(el("th", { textContent: wd.format(new Date(2024, 0, 1 + i)).replace(".", "").slice(0, 3) }));
+  }
+  const tbody = el("tbody");
+  for (const task of state.tasks) {
+    const tr = el("tr", null, el("td", { className: "sname" }, task.n, el("span", { textContent: ` · ${taskPts(task)} ${t("points")}` })));
+    for (let i = 0; i < 7; i++) tr.append(el("td", null, el("span", { className: "box" })));
+    tbody.append(tr);
+  }
+  const sheet = $("print-sheet");
+  sheet.replaceChildren(
+    el("h1", { textContent: title }),
+    el("p", { className: "srange", textContent: t("sheetPencil") }),
+    el("table", null, el("thead", null, head), tbody),
+    el("p", { className: "stotal", textContent: `⭐ ${t("sheetTotal")}: ` }, el("span", { className: "line" })),
+    el("p", { className: "cheer", textContent: t("sheetCheer") }));
+  if (state.rewards.length) {
+    sheet.append(el("h2", { textContent: `🏆 ${t("sheetRewards")}` }),
+      el("ul", null, ...state.rewards.map((r) => el("li", { textContent: `🎁 ${r.n} — ${r.c} ${t("points")}` }))));
+  }
+}
+
+$("print").addEventListener("click", () => {
+  buildSheet();
+  window.print();
+});
+
 document.querySelectorAll('[data-action="examples"]').forEach((b) => b.addEventListener("click", () => {
   const ex = I18N[lang];
   change((s) => {
