@@ -1,6 +1,6 @@
 # Pontix
 
-**Live demo: https://cunhaax.github.io/pontix/**
+**Use it now: https://cunhaax.github.io/pontix/**
 
 <p>
   <img src="docs/screenshot-light.png" alt="Pontix, light theme" width="300">
